@@ -1,8 +1,7 @@
-__version__="0.1.1"
+__version__="0.1.2"
 import tkinter
 import customtkinter
 from blockchain import exchangerates as ex
-
 
 
 
@@ -15,7 +14,7 @@ app.title("Bitcoin Converter App")
 
 #creates a frame effect in background
 frame1 = customtkinter.CTkFrame(master = app) #master or placement is the "app" defined
-frame1.pack(pady=20, padx=60, fill="both", expand=True)
+frame1.pack(pady=10, padx=15, expand=False)
 
 
 #Bitcoin Price Tracker
@@ -30,9 +29,14 @@ label1 = customtkinter.CTkLabel(master=frame1, justify=tkinter.LEFT,text=f'''
 ${btcPrice}''')
 label1.pack(pady=10, padx=10)
 
+#Function to delete last result
+def myDelete():
+    label.destroy()
+
 
 #Function that takes the dollar entry input to convert to bitcoin
 def button_function():
+    global label
     entryState = entry.get()
     e = entryState
     if e.isdigit():        
@@ -40,8 +44,8 @@ def button_function():
         btcA = ("{:.8f}".format(btcAmount))
         print(f"{btcA} BTC")
         #shows results. Need to show after convert somehow
-        label = customtkinter.CTkLabel(master=app, text=f"Results: {btcA} BTC")
-        label.pack(pady=15, padx=15)        
+        label = customtkinter.CTkLabel(master=frame1, text=f"Results: {btcA} BTC")
+        label.pack(pady=5, padx=2)
     else:
         print(False)
 
@@ -61,7 +65,9 @@ dropMenu1.set("Fiat Type")
 button = customtkinter.CTkButton(master=frame1, text="Convert", command=button_function)
 button.pack(padx=25, pady=10)
 
-
+#used to delete the label of result
+dbutton = customtkinter.CTkButton(master=frame1, text="Delete", command=myDelete)
+dbutton.pack(padx=25, pady=1)
 
 
 app.mainloop()
