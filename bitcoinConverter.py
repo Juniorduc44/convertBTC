@@ -1,4 +1,4 @@
-__version__="0.1.3"
+__version__="0.1.4"
 import tkinter
 import customtkinter
 from blockchain import exchangerates as ex
@@ -22,7 +22,7 @@ customtkinter.set_appearance_mode("System") #Modes: system (default), light, dar
 customtkinter.set_default_color_theme("blue") # Themes: blue (default), dark-blue, green
 
 app = customtkinter.CTk() #create CTK window like you do with the Tk window
-app.geometry("400x240")
+app.geometry("400x300")
 app.title("Bitcoin Converter App")
 
 #creates a frame effect in background
