@@ -18,7 +18,7 @@ def button_function():
     else:
         print(False)
 
-customtkinter.set_appearance_mode("System").set_default_color_theme("blue") #Modes: system (default), light, dark
+customtkinter.set_appearance_mode("System")#.set_default_color_theme("blue") #Modes: system (default), light, dark
  # Themes: blue (default), dark-blue, green
 
 app = customtkinter.CTk() #create CTK window like you do with the Tk window
@@ -26,7 +26,8 @@ app.geometry("400x300")
 app.title("Bitcoin Converter App")
 
 #creates a frame effect in background
-frame1 = customtkinter.CTkFrame(master = app).pack(pady=10, padx=15, expand=False) #master or placement is the "app" defined
+frame1 = customtkinter.CTkFrame(master = app)
+frame1.pack(pady=10, padx=15, expand=True) #master or placement is the "app" defined
 
 #Bitcoin Price Tracker
 ticker = ex.get_ticker()
