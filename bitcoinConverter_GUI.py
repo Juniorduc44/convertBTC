@@ -1,5 +1,5 @@
 __version__="0.1.7"
-import tkinter
+#import tkinter
 import customtkinter
 from blockchain import exchangerates as ex
 
