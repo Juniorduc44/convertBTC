@@ -2,8 +2,8 @@
 Bitcoin Conversion GUI
 
 ## Installations
-## Install the Custom Tkinter module 
-    pip3 install customtkinter blockchain
+## Install the CustomTkinter 
+    pip3 install customtkinter
 ---
 **<if necessary> Update existing installation:** pip3 install customtkinter --upgrade
 
