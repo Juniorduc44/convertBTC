@@ -1,41 +1,12 @@
-a = float(input("Enter starting number: "))
-b = float(input("Enter final number: "))
+__version__="1.0.0"
+from blockchain import exchangerates as ex
 
-c = b - a
+#Bitcoin Price Tracker
+ticker = ex.get_ticker()
+for k in ticker:
+    if k == "USD":
+        btcPrice = (ticker[k].p15min)
 
-if a > b:  # if a is greater than b then to get to b your result will be negative.
-    cc = f"{c:.8f}"
-    d = c / b
-    e = d * 100
-    ee = f"{e:.2f}"
-    print(f'''
-  1.) {a}
-  2.) {b}
-
-        The results of getting from (1) to (2):
-
-                    Diff = {cc}
-                  % Diff = {ee}%
-        ''')
-
-elif a < b:
-    cc = f"{c:.8f}"
-    d = c / b
-    e = d * 100
-    ee = f"{e:.2f}"
-    print(f'''
-  1.) {a}
-  2.) {b}
-
-        The results of getting from (1) to (2):
-
-                    Diff = {cc}
-                  % Diff = {ee}%
-
-        ''')
-
-elif a == b:
-    print("The entered numbers are the same.")
-
-else:
-    print("Thank you, come again.")
+N = float(input('Enter the dollar amount you would like to convert into Bitcoin: '))
+a = N / btcPrice
+print("{:.8f}".format(a))
