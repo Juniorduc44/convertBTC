@@ -1,5 +1,4 @@
-__version__="0.1.8"
-import tkinter
+__version__="0.2.0"
 import customtkinter
 from blockchain import exchangerates as ex
 import re
@@ -27,7 +26,6 @@ class BitcoinConverter:
         # Bitcoin price label
         self.label1 = customtkinter.CTkLabel(
             master=self.frame1,
-            justify=tkinter.LEFT,
             text=f"Bitcoin\n${self.btcPrice:,.2f}"
         )
         self.label1.pack(pady=10, padx=10)
@@ -74,12 +72,14 @@ class BitcoinConverter:
         self.delete_button.pack(padx=25, pady=1)
         
         # Result label
-        self.result_label = customtkinter.CTkLabel(master=self.frame1, text="")
+        self.result_label = customtkinter.CTkLabel(
+            master=self.frame1,
+            text=""
+        )
         self.result_label.pack(pady=10)
 
     def validate_input(self, input_str):
         # Regular expression to match numbers with optional decimal point
-        # Allows: "123", "123.456", ".123", "0.123"
         pattern = r'^\d*\.?\d*$'
         return bool(re.match(pattern, input_str)) and input_str != '.'
     
