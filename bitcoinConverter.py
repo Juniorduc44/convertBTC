@@ -1,4 +1,5 @@
-__version__="1.0.1"
+#python 3.11
+__version__="2.0.0"
 from blockchain import exchangerates as ex
 
 def get_bitcoin_price():
