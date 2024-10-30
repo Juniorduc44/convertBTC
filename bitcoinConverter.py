@@ -1,5 +1,5 @@
 #python 3.11
-__version__="2.0.0"
+__version__="2.1.0"
 from blockchain import exchangerates as ex
 
 def get_bitcoin_price():
@@ -9,6 +9,13 @@ def get_bitcoin_price():
     except Exception as e:
         print(f"Error fetching Bitcoin price: {e}")
         return None
+
+def format_usd_amount(amount):
+    # If amount is less than 1 cent, show up to 8 decimal places
+    if amount < 0.01:
+        return f"${amount:.8f}"
+    # Otherwise use standard 2 decimal places
+    return f"${amount:,.2f}"
 
 def validate_input(amount_str):
     try:
@@ -31,6 +38,7 @@ def main():
     print("\nSelect conversion type:")
     print("1. USD to BTC")
     print("2. BTC to USD")
+    print("Note: 1 satoshi = 0.00000001 BTC")
     
     choice = input("\nEnter choice (1 or 2): ").strip()
     
@@ -39,14 +47,35 @@ def main():
         amount = validate_input(amount_str)
         if amount is not None:
             btc_amount = amount / btc_price
-            print(f"\nResult: {btc_amount:.8f} BTC")
+            satoshis = int(btc_amount * 100000000)  # Convert to satoshis
+            if satoshis < 100:  # If less than 100 satoshis
+                print(f"\nResult: {satoshis} satoshi(s)")
+                print(f"Result: {btc_amount:.8f} BTC")
+            else:
+                print(f"\nResult: {btc_amount:.8f} BTC")
+                print(f"Result: {satoshis:,} satoshis")
     
     elif choice == "2":
-        amount_str = input('\nEnter Bitcoin amount to convert to USD: ')
-        amount = validate_input(amount_str)
+        amount_str = input('\nEnter Bitcoin amount (or use "sat" for satoshis, e.g., "1000sat"): ')
+        if amount_str.lower().endswith('sat'):
+            # Handle satoshi input
+            try:
+                satoshis = float(amount_str[:-3])  # Remove 'sat' from the end
+                amount = satoshis / 100000000  # Convert satoshis to BTC
+            except ValueError:
+                print("Invalid satoshi amount")
+                return
+        else:
+            amount = validate_input(amount_str)
+            
         if amount is not None:
             usd_amount = amount * btc_price
-            print(f"\nResult: ${usd_amount:,.2f}")
+            formatted_usd = format_usd_amount(usd_amount)
+            print(f"\nResult: {formatted_usd}")
+            # If it's a very small amount, show satoshis
+            if amount < 0.00001:
+                satoshis = int(amount * 100000000)
+                print(f"Input was approximately {satoshis} satoshi(s)")
     
     else:
         print("\nInvalid choice. Please select 1 or 2.")
