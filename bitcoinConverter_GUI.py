@@ -1,3 +1,4 @@
+#python 3.11
 __version__="0.2.0"
 import customtkinter
 from blockchain import exchangerates as ex
