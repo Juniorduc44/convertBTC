@@ -1,73 +1,148 @@
-__version__="0.1.7"
+__version__="0.1.8"
 import tkinter
 import customtkinter
 from blockchain import exchangerates as ex
+import re
 
+class BitcoinConverter:
+    def __init__(self):
+        self.app = customtkinter.CTk()
+        self.app.geometry("400x340")
+        self.app.title("Bitcoin Converter App")
+        
+        # Get Bitcoin price
+        ticker = ex.get_ticker()
+        self.btcPrice = ticker["USD"].p15min
+        
+        # Initialize conversion mode
+        self.is_usd_to_btc = True  # True for USD->BTC, False for BTC->USD
+        
+        self.create_widgets()
+        
+    def create_widgets(self):
+        # Main frame
+        self.frame1 = customtkinter.CTkFrame(master=self.app)
+        self.frame1.pack(pady=10, padx=15, expand=True)
+        
+        # Bitcoin price label
+        self.label1 = customtkinter.CTkLabel(
+            master=self.frame1,
+            justify=tkinter.LEFT,
+            text=f"Bitcoin\n${self.btcPrice:,.2f}"
+        )
+        self.label1.pack(pady=10, padx=10)
+        
+        # Toggle switch frame
+        self.toggle_frame = customtkinter.CTkFrame(master=self.frame1)
+        self.toggle_frame.pack(pady=5)
+        
+        # Toggle switch with labels
+        self.mode_label = customtkinter.CTkLabel(
+            master=self.toggle_frame,
+            text="USD → BTC"
+        )
+        self.mode_label.pack(side='left', padx=10)
+        
+        self.toggle_switch = customtkinter.CTkSwitch(
+            master=self.toggle_frame,
+            text="",
+            command=self.toggle_conversion_mode
+        )
+        self.toggle_switch.pack(side='left', padx=10)
+        
+        # Entry box with validation
+        self.entry = customtkinter.CTkEntry(
+            master=self.frame1,
+            placeholder_text="Enter Amount (decimals allowed)"
+        )
+        self.entry.pack(padx=25, pady=10)
+        
+        # Convert button
+        self.convert_button = customtkinter.CTkButton(
+            master=self.frame1,
+            text="Convert",
+            command=self.convert
+        )
+        self.convert_button.pack(padx=25, pady=10)
+        
+        # Delete button
+        self.delete_button = customtkinter.CTkButton(
+            master=self.frame1,
+            text="Delete",
+            command=self.delete_result
+        )
+        self.delete_button.pack(padx=25, pady=1)
+        
+        # Result label
+        self.result_label = customtkinter.CTkLabel(master=self.frame1, text="")
+        self.result_label.pack(pady=10)
 
-#Function to delete last result
-def myDelete():
-    label.configure(text="")
+    def validate_input(self, input_str):
+        # Regular expression to match numbers with optional decimal point
+        # Allows: "123", "123.456", ".123", "0.123"
+        pattern = r'^\d*\.?\d*$'
+        return bool(re.match(pattern, input_str)) and input_str != '.'
+    
+    def toggle_conversion_mode(self):
+        self.is_usd_to_btc = not self.is_usd_to_btc
+        if self.is_usd_to_btc:
+            self.mode_label.configure(text="USD → BTC")
+            self.entry.configure(placeholder_text="Enter USD Amount")
+        else:
+            self.mode_label.configure(text="BTC → USD")
+            self.entry.configure(placeholder_text="Enter BTC Amount")
+        self.delete_result()
+    
+    def convert(self):
+        entry_value = self.entry.get().strip()
+        
+        # Validate input
+        if not self.validate_input(entry_value):
+            self.result_label.configure(
+                text="Please enter a valid number\n(decimals allowed)",
+                text_color="red"
+            )
+            return
 
+        try:
+            amount = float(entry_value)
+            
+            # Additional validation for negative numbers
+            if amount < 0:
+                self.result_label.configure(
+                    text="Please enter a positive number",
+                    text_color="red"
+                )
+                return
+                
+            if self.is_usd_to_btc:
+                # Convert USD to BTC
+                btc_amount = amount / self.btcPrice
+                self.result_label.configure(
+                    text=f"Results: {btc_amount:.8f} BTC",
+                    text_color="green"
+                )
+            else:
+                # Convert BTC to USD
+                usd_amount = amount * self.btcPrice
+                self.result_label.configure(
+                    text=f"Results: ${usd_amount:,.2f}",
+                    text_color="green"
+                )
+        except ValueError:
+            self.result_label.configure(
+                text="Please enter a valid number",
+                text_color="red"
+            )
+    
+    def delete_result(self):
+        self.result_label.configure(text="")
+        self.entry.delete(0, 'end')
+    
+    def run(self):
+        self.app.mainloop()
 
-#Function that takes the dollar entry input to convert to bitcoin
-def button_function():
-    global label
-    entryState = entry.get()
-    e = entryState
-    if e.isdigit():        
-        btcAmount = int(e)/btcPrice
-        btcA = ("{:.8f}".format(btcAmount))
-        print(f"{btcA} BTC")
-        #shows results. Need to show after convert somehow
-        label.configure(text=f"Results: {btcA} BTC")
-    else:
-        print(False)
-
-
-
-customtkinter.set_appearance_mode("System")#.set_default_color_theme("blue") #Modes: system (default), light, dark
- # Themes: blue (default), dark-blue, green
-
-app = customtkinter.CTk() #create CTK window like you do with the Tk window
-app.geometry("400x300")
-app.title("Bitcoin Converter App")
-
-#creates a frame effect in background
-frame1 = customtkinter.CTkFrame(master = app)
-frame1.pack(pady=10, padx=15, expand=True) #master or placement is the "app" defined
-
-#Bitcoin Price Tracker
-ticker = ex.get_ticker()
-for k in ticker:
-    if k == "USD":
-        btcPrice = (ticker[k].p15min)
-
-#Bitcoin Label for the current interface showing
-label1 = customtkinter.CTkLabel(master=frame1, justify=tkinter.LEFT,text=f'''
-    Bitcoin
-${btcPrice}''')
-label1.pack(pady=10, padx=10)
-
-#Entry box for the conversion
-entry = customtkinter.CTkEntry(master=frame1, placeholder_text="Enter $ Amount")
-entry.pack(padx=25, pady=10)
-
-#Dropdown menu Next to entry box for currency conversion
-#???Need to make this drop menu smaller and adjacent to the left of the entry box. Default USD.
-#dropMenu1 = customtkinter.CTkOptionMenu(frame1, values=["USD", "CAD", "JPY", "GBP"])
-#dropMenu1.pack(padx=10, pady=10)
-#dropMenu1.set("Fiat Type")
-
-#Use CTKButton instead of tkinter Button
-#used pack to keep button in place instead of using place which lets it move with window
-button = customtkinter.CTkButton(master=frame1, text="Convert", command=button_function).pack(padx=25, pady=10)
-
-
-#button to delete the label of result
-dbutton = customtkinter.CTkButton(master=frame1, text="Delete", command=myDelete).pack(padx=25, pady=1)
-
-#widget to create placement for the results
-label = customtkinter.CTkLabel(master=frame1, text="")
-label.pack()
-
-app.mainloop()
+if __name__ == "__main__":
+    customtkinter.set_appearance_mode("System")
+    app = BitcoinConverter()
+    app.run()
