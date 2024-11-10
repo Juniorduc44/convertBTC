@@ -39,8 +39,8 @@ Bitcoin Conversion GUI
  <h3 align="center">bc1qxvyju2nwnv9a2w3kqh4dcla0hy4n5x9g5lj3p5</h3>
      <p align="center">
      <picture>
-         <source media="(prefers-color-scheme: dark)" srcset="./images/qrDonation_qrGeneratorImage.png">
-         <img src="./images/qrDonation_qrGeneratorImage.png">
+         <source media="(prefers-color-scheme: dark)" srcset="./images/qrDonation_convertBTCImage.png">
+         <img src="./images/qrDonation_convertBTCImage.png">
      </picture>
      </p>
  </h3>
