@@ -28,3 +28,20 @@ Bitcoin Conversion GUI
     </picture>
     </p>
 <div align="center">
+
+<details>
+<summary>Donations</summary>
+
+  ##### QR CODE create by: [myself](https://github.com/Juniorduc44/qrGenGui)
+ <h3 align="center">BITCOIN</h3>
+ <h3 align="center">bc1qxvyju2nwnv9a2w3kqh4dcla0hy4n5x9g5lj3p5</h3>
+     <p align="center">
+     <picture>
+         <source media="(prefers-color-scheme: dark)" srcset="./images/qrDonation_qrGeneratorImage.png">
+         <img src="./images/qrDonation_qrGeneratorImage.png">
+     </picture>
+     </p>
+ </h3>
+
+
+ </details>
