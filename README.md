@@ -4,7 +4,8 @@ Bitcoin Conversion GUI
 ## Installations
 
 ## Install Python
-- For [Linux](./python311.md)
+- Load python on [Linux](./python311.md)
+- Load python [environment](./loadPythonEnv.md)
 ## Install CustomTkinter and blockchain
     pip3 install customtkinter blockchain
 ---
